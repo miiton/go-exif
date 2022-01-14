@@ -9,7 +9,7 @@ import (
 	"encoding/binary"
 	"io/ioutil"
 
-	"github.com/dsoprea/go-logging"
+	log "github.com/dsoprea/go-logging"
 )
 
 const (
@@ -104,15 +104,21 @@ func SearchFileAndExtractExif(filepath string) (rawExif []byte, err error) {
 	// Open the file.
 
 	f, err := os.Open(filepath)
-	log.PanicIf(err)
+	if err != nil {
+		return nil, err
+	}
 
 	defer f.Close()
 
 	data, err := ioutil.ReadAll(f)
-	log.PanicIf(err)
+	if err != nil {
+		return nil, err
+	}
 
 	rawExif, err = SearchAndExtractExif(data)
-	log.PanicIf(err)
+	if err != nil {
+		return nil, err
+	}
 
 	return rawExif, nil
 }
